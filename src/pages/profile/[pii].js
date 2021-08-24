@@ -5,7 +5,9 @@ import {
   Avatar,
   User,
   UserName,
-  PlaceHolder
+  PlaceHolder,
+  TotalAmountSessions,
+  PageViewsCount
 } from './styles'
 
 import { Layout } from '../../containers'
@@ -17,6 +19,12 @@ import {
   CardHeader,
   CardContent
 } from '../../components/ui/Card'
+
+import {
+  Section,
+  SectionHeader,
+  SectionContent
+} from '../../components/ui/Section'
 
 
 const CustomerProfile = () => {
@@ -79,6 +87,24 @@ const CustomerProfile = () => {
               <div>
                 <Attribute property="Sistema Operacional" value="Windows" />
               </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Demographic Data */}
+        <Card>
+          <CardHeader title="Dados de Sessões" />
+          <CardContent>
+            <div className="grid grid-cols-4">
+              {/* block 1 */}
+              <Section>
+                <SectionHeader title="Total de Sessões" />
+                <SectionContent>
+                  <TotalAmountSessions>579</TotalAmountSessions>
+                  <PageViewsCount>Page views <span>2.492</span></PageViewsCount>
+                </SectionContent>
+              </Section>
+             
             </div>
           </CardContent>
         </Card>

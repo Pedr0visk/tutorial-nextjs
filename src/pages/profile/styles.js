@@ -40,3 +40,23 @@ export const Avatar = styled.div`
   align-items: center;
   justify-content: center;
 `
+
+export const TotalAmountSessions = styled.span`
+  font-size: 40px;
+  line-height: 62px;
+  font-style: normal;
+  font-weight: normal;
+  color: var(--primary);
+`
+
+export const PageViewsCount = styled.p`
+  color: var(--primary);
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  margin-top: 10px;
+  > span {
+    font-weight: bold;
+    margin-left: 15px;
+  }
+`
