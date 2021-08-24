@@ -14,10 +14,14 @@ export default createGlobalStyle`
     color: inherit;
   }
 
+  h1, h2, h3 {
+    margin: 0;
+  }
+
   :root {
     --primary: #00a8e1;
     --secondary: #f68926;
-    --tertiary: rgb(32,34,37);
+    --tertiary: #F2FBFE;
     --quaternary: #292b2f;
     --quinary: #393d42;
     --senary: #828386;
@@ -27,6 +31,7 @@ export default createGlobalStyle`
     --black10: #000;
     --background: #f2f3f5;
 
+    --title: #2b2f3A;
     --text: #4C536580;
   }
 

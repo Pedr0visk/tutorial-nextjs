@@ -1,4 +1,5 @@
 import React from 'react'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { 
   Container, 
   PageTitle, 
@@ -6,7 +7,6 @@ import {
   ActionLink,
   ToggleBtn 
 } from './styles'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { 
   faBell, 
   faQuestionCircle, 
@@ -23,6 +23,7 @@ const Header = () => {
       <ToggleBtn id="sidebarToggleBtn">
         <FontAwesomeIcon icon={faBars} />
       </ToggleBtn>
+      
       <PageTitle>
         Customer Data Plataform
       </PageTitle>
