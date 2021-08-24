@@ -37,7 +37,7 @@ const Filter = () => {
           <Select>
             <Option>Exportar audiência</Option>
             {options.map((element) => (
-              <Option value={element}>{element}</Option>
+              <Option key={element} value={element}>{element}</Option>
             ))}
           </Select>
         </Link>

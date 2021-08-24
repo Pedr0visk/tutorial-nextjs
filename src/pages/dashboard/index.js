@@ -3,6 +3,7 @@
   import GraphicCard from '../../containers/GraphicsCard'
   import Layout from '../../containers/Layout'
   import Title from '../../containers/PageTitle'
+import TableMain from '../../containers/Table'
 
   const Dashboard = () => {
     return (
@@ -25,6 +26,10 @@
           </GraphicCard>
           </ContainerGraphics>
         </Container>
+        <div style={{alignItems: 'center', justifyContent: 'center'}}>
+        <TableMain />
+        </div>
+        
       </Layout>
     )
   }
