@@ -1,19 +1,29 @@
 import React from 'react'
-import { Container, PageTitle, AccountInfo, AccountName, Actions, ActionLink } from './styles'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { 
+  Container, 
+  PageTitle, 
+  Actions, 
+  ActionLink,
+  ToggleBtn 
+} from './styles'
 import { 
   faBell, 
   faQuestionCircle, 
   faDownload,
   faCog,
-  faSignOutAlt
+  faSignOutAlt,
+  faBars
 } from "@fortawesome/free-solid-svg-icons"
 
-import Logo from '../../components/ui/Logo'
 
 const Header = () => {
   return (
     <Container>
+      <ToggleBtn id="sidebarToggleBtn">
+        <FontAwesomeIcon icon={faBars} />
+      </ToggleBtn>
+      
       <PageTitle>
         Customer Data Plataform
       </PageTitle>

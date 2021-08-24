@@ -12,7 +12,12 @@ export const Container = styled.div`
   background-color: var(--background);
 `
 export const Wrapper = styled.main`
+  flex: 1;
   margin-left: 58px;
-  flex: 1
+  &.shrink {
+    margin-left: 250px;
+  }
+
+  transition: box-shadow .3s .15s,transform .3s,margin-left .3s,margin-right .3s,width .3s,z-index 0s ease .3s,-webkit-transform .3s;
 `
 export const Body = styled.div``
