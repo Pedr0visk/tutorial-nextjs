@@ -1,4 +1,5 @@
 import React from 'react'
+import dynamic from 'next/dynamic'
 
 import { 
   Profile,
@@ -26,6 +27,11 @@ import {
   SectionContent
 } from '../../components/ui/Section'
 
+
+const DynamicComponentWithNoSSR = dynamic(
+  () => import('../../components/ui/Chart'),
+  { ssr: false }
+)
 
 const CustomerProfile = () => {
   return (
@@ -102,6 +108,7 @@ const CustomerProfile = () => {
                 <SectionContent>
                   <TotalAmountSessions>579</TotalAmountSessions>
                   <PageViewsCount>Page views <span>2.492</span></PageViewsCount>
+                  <DynamicComponentWithNoSSR />
                 </SectionContent>
               </Section>
              
