@@ -39,9 +39,10 @@ const Layout = ({children}) => {
           as="font"
           crossOrigin=""
         />
+        <script async src="/js/main.js" />
       </Head>
       <Sidebar />
-      <Wrapper>
+      <Wrapper id='wrapper'>
         <Header />
         <Filter />
         <Body>

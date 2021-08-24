@@ -26,7 +26,7 @@ export const AccountName = styled.h4`
   font-size: 14px;
   font-weight: 700;
   line-height: 58px;
-  margin-left: 10px
+  margin-left: 10px;
   
 `
 
@@ -60,6 +60,22 @@ export const ActionLink = styled.button`
   }
 
   > svg {
-    color: #777
+    color: #777;
   }
+`
+
+export const ToggleBtn = styled.button`
+  margin-right: 20px;
+  border: 0;
+  background: transparent;
+  > svg {
+    font-size: 16px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  z-index: 1030;
+
 `
