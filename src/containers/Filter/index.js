@@ -26,7 +26,7 @@ const Filter = () => {
           <Select>
             <Option>Segmentos</Option>
             {options.map((element) => (
-              <Option value={element}>{element}</Option>
+              <Option key={element} value={element}>{element}</Option>
             ))}
           </Select>
         </Link>
