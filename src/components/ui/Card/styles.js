@@ -37,5 +37,5 @@ export const CardBody = styled.div`
 `
 
 export const CContent = styled.div`
-  padding: 2rem 4rem;
+  padding: 2rem;
 `
