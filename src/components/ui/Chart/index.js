@@ -1,36 +1,28 @@
 import React, { useState } from 'react'
 import {default as RChart } from "react-apexcharts";
+import PropTypes from 'prop-types'
 
 
-const Chart = () => {
-  const [options, seOptions] = useState({
-    chart: {
-      id: "basic-bar"
-    },
-    xaxis: {
-      categories: ['Ago', 'Set', 'Out', 'Nov', 'Dec', "Jan"]
-    }
-  })
-
-  const [series, setSeries] = useState([
-    {
-      name: "pageviews",
-      data: [30, 40, 45, 50, 49, 56]
-    }
-  ])
-
+const Chart = ({ type, options, series }) => {
   return (
     <div className="app">
-      <div className="mixed-chart">
-        <RChart
-          options={options}
-          series={series}
-          type="area"
-          width="300"
-        />
+      <div className="row">
+        <div className="mixed-chart">
+          <RChart
+            options={options}
+            series={series}
+            type={type}
+          />
+        </div>
       </div>
     </div>
   )
+}
+
+Chart.propTypes = {
+  type: PropTypes.string.isRequired,
+  options: PropTypes.instanceOf(Object).isRequired,
+  series: PropTypes.instanceOf(Array).isRequired
 }
 
 export default Chart

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { spacing, shadow, colors } from '../../styles/theme'
+import { spacing, shadow, colors } from '../styles/theme'
 
 export const Profile = styled.div`
   background-color: white;
