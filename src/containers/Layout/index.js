@@ -1,14 +1,8 @@
 import React from "react"
 
 import Head from "next/head";
-import Link from "next/link";
 import { Container, Wrapper, Body } from './styles'
-import {
-  Header,
-  Footer,
-  Sidebar,
-  Filter
-} from '../index'
+import { Header, Sidebar } from '../index'
 
 
 const Layout = ({children}) => {
@@ -44,7 +38,6 @@ const Layout = ({children}) => {
       <Sidebar />
       <Wrapper id='wrapper'>
         <Header />
-        <Filter />
         <Body>
           {children}
         </Body>

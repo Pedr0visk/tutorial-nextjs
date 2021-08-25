@@ -76,7 +76,7 @@ const CustomerProfile = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto px-10">
+      <div className="md:container md:mx-auto">
         <Head title="Customer Profile" subtitle="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis aspernatur iste laboriosam obcaecati, distinctio sapiente consequuntur et ad consectetur vel!" />
 
         {/* User's Profile */}

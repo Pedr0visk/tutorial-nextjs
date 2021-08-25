@@ -32,6 +32,7 @@ export default createGlobalStyle`
     --background: #f2f3f5;
 
     --title: #2b2f3A;
+		--subtitle: #4C5365;
     --text: #4C536580;
   }
 
