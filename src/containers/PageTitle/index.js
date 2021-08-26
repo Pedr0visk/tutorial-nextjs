@@ -7,9 +7,8 @@ const Title = ({value, subtitle}) => {
       <TitleName>
         {value}
       </TitleName>
-
       <SubtitleName>
-          {subtitle}
+				{subtitle}
       </SubtitleName>
     </Container>
   )
