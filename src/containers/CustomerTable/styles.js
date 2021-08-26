@@ -18,8 +18,15 @@ export const Paginator = styled.div`
 		color: #2B2F3A;
 
 		a {
-			padding: 6px 10px;
-
+			padding: 0.2rem 0.5rem;
+			line-height: 30px;
+			transition: .1s ease;
+			margin-right: 3px;
+			
+			&:hover {
+				background: var(--primary);
+				color: white;
+			}
 			> svg {
 				font-size: 10px;
 			}

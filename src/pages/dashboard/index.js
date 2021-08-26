@@ -18,9 +18,8 @@ import { faFilter, faChevronDown, faFileArchive } from '@fortawesome/free-solid-
 import WidgetsCustomers from '../../widgets/WidgetsCustomers'
 import CustomerTable from '../../containers/CustomerTable'
 
-import customers from '../../containers/CustomerTable/customers.json'
 
-const Dashboard = () => {
+const Dashboard = ({ customers }) => {
   return (
     <Layout>
       <Breadcrumb>
@@ -59,6 +58,31 @@ const Dashboard = () => {
 			</div>
     </Layout>
   )
+}
+
+export async function getStaticProps(context) {
+	const res = await fetch(`${process.env.HOST}/api/customers/`)
+  const data = await res.json()
+
+	if (!data) {
+    return {
+      notFound: true,
+    }
+  }
+
+	const customers = data.results.map(customer => ({
+		email: customer.attributes?.email || '',
+		name: customer.attributes?.name || '',
+		phone_number: customer.attributes?.phone_number || '--',
+		created_at: customer.created_at,
+	}))
+	console.log(customers)
+
+  return {
+    props: {
+			customers
+		}, // will be passed to the page component as props
+  }
 }
 
 export default Dashboard
