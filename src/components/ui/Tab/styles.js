@@ -7,6 +7,7 @@ export const TabItem = styled.li`
   padding-bottom: 3px;
   color: var(--title);
   border-bottom: 1px solid transparent;
+	cursor: pointer;
 
   ${props => props.active && css`
     border-bottom-color: var(--title);

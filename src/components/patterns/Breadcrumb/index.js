@@ -1,15 +1,17 @@
 import React from 'react'
-import { Container, Link, Dropdown, Select, Option } from './styles'
+import Link from 'next/link'
+import { Container } from './styles'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { 
-  faCalendar,
-  faFileExport,
-  faFilter,
-} from "@fortawesome/free-solid-svg-icons"
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 
-const Breadcrumb = ({ children }) => {
+const Breadcrumb = ({ children, action }) => {
   return (
     <Container>
+			{action && (
+				<Link href="/dashboard">
+					<a className="action-link"><FontAwesomeIcon icon={faChevronLeft}  /> Voltar</a>
+				</Link>
+			)}
       {children}
     </Container>
   )

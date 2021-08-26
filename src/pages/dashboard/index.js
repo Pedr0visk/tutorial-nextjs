@@ -7,7 +7,7 @@ import {
   Icon,
   Text,
   AriaLabel
-} from './styles'
+} from '../../styles/dashboard'
 
 import { Layout } from '../../containers'
 import { Breadcrumb, Head } from '../../components/patterns'

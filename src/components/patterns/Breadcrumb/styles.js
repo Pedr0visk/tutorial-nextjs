@@ -9,17 +9,25 @@ export const Container = styled.div`
   display: flex;
   
   align-items: center;
+
+	> a.action-link {
+		font-size: 12px;
+		color: #4c5366;
+		&:hover {
+			color: var(--primary);
+		}
+		
+		> svg {
+			margin-right: 6px;
+			font-size: 10px;
+		}
+	}
 `
 
 export const Dropdown = styled.div``
 export const Link = styled.a`
   padding: 0 15px;
-  font-size: 12px;
-  color: #4c5366;
-
-  > svg {
-    margin-right: 6px;
-  }
+ 
 `
 export const Select = styled.select`
 border: none;

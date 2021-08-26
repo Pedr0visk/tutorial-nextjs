@@ -12,7 +12,7 @@ import {
 } from '../../styles/profile'
 
 import { Layout } from '../../containers'
-import { Head } from '../../components/patterns'
+import { Breadcrumb, Head } from '../../components/patterns'
 import { Attribute } from '../../components/foundation'
 
 import {
@@ -76,6 +76,7 @@ const CustomerProfile = () => {
 
   return (
     <Layout>
+			<Breadcrumb action />
       <div className="md:container md:mx-auto">
         <Head title="Customer Profile" subtitle="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis aspernatur iste laboriosam obcaecati, distinctio sapiente consequuntur et ad consectetur vel!" />
 
