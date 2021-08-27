@@ -4,11 +4,11 @@ import { Container } from './styles'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons"
 
-const Breadcrumb = ({ children, action }) => {
+const Breadcrumb = ({ children, backUrl }) => {
   return (
     <Container>
-			{action && (
-				<Link href="/dashboard">
+			{backUrl && (
+				<Link href={backUrl}>
 					<a className="action-link"><FontAwesomeIcon icon={faChevronLeft}  /> Voltar</a>
 				</Link>
 			)}

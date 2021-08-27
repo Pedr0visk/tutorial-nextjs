@@ -2,16 +2,17 @@ import React from 'react'
 import { TableContainer, Caret } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretUp, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import Link from 'next/link'
 
 const Table = ({ items, fields }) => {
 	return (
 		<TableContainer className="">
 			<thead>
 				<tr>
-					{fields.map(name => {
+					{fields.map(field => {
 						return (
-							<th key={name}>
-								{name}
+							<th key={field.attr}>
+								{field.label}
 								<Caret>
 									<FontAwesomeIcon icon={faCaretUp} />
 									<FontAwesomeIcon icon={faCaretDown} />
@@ -25,7 +26,7 @@ const Table = ({ items, fields }) => {
 				{items.map((item, index) => {
 					return (
 						<tr key={index}>
-							{Object.keys(item).map(attr => (<td key={attr}>{item[attr]}</td>))}
+							{fields.map(field => (<td key={item[field.attr]}><Link className="link" href={`/profile/${item.id}`}>{item[field.attr]}</Link></td>))}
 						</tr>
 					)
 				})}

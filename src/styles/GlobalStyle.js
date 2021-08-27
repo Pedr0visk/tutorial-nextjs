@@ -34,6 +34,8 @@ export default createGlobalStyle`
     --title: #2b2f3A;
 		--subtitle: #4C5365;
     --text: #4C536580;
+
+		--danger: #ce0000;
   }
 
   @font-face {

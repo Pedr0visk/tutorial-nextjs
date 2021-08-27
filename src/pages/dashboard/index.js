@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { 
   Navbar, 
   NavbarItem, 
@@ -17,23 +17,34 @@ import { faFilter, faChevronDown, faFileArchive } from '@fortawesome/free-solid-
 
 import WidgetsCustomers from '../../widgets/WidgetsCustomers'
 import CustomerTable from '../../containers/CustomerTable'
+import SearchField from '../../components/ui/SearchField'
+import SegmentFilter from '../../components/segments/SegmentFilter'
 
 
 const Dashboard = ({ customers }) => {
+	const [showDropdown, toggleDropdown] = useState(false)
   return (
     <Layout>
       <Breadcrumb>
         <Navbar>
 					{/* Segments */}
           <NavbarItem>
-            <DropdownBtn>
+						{/* Dropdown Btn */}
+            <DropdownBtn onClick={(e) => toggleDropdown(!showDropdown)}>
               <Icon><FontAwesomeIcon icon={faFilter} /></Icon>
               <Text>Segmentos</Text>
               <AriaLabel><FontAwesomeIcon icon={faChevronDown} /></AriaLabel>
             </DropdownBtn>
-            <DropdownMenu>
-              meu menu
-            </DropdownMenu>
+
+						{/* Dropdown Menu */}
+            {showDropdown && (
+							<DropdownMenu >
+								<p>Faça uma busca ou selecione os filtros nas categorias abaixo:</p>
+								<SearchField />
+								<SegmentFilter />
+								{/* <Segments /> */}
+							</DropdownMenu>
+						)}
           </NavbarItem>
 
 					{/* Segments Explorer */}
@@ -43,9 +54,6 @@ const Dashboard = ({ customers }) => {
               <Text>Explorar Segmentos</Text>
               <AriaLabel><FontAwesomeIcon icon={faChevronDown} /></AriaLabel>
             </DropdownBtn>
-            <DropdownMenu>
-              meu menu
-            </DropdownMenu>
           </NavbarItem>
         </Navbar>
       </Breadcrumb>
@@ -71,12 +79,12 @@ export async function getStaticProps(context) {
   }
 
 	const customers = data.results.map(customer => ({
+		id: customer._id,
 		email: customer.attributes?.email || '',
 		name: customer.attributes?.name || '',
 		phone_number: customer.attributes?.phone_number || '--',
 		created_at: customer.created_at,
 	}))
-	console.log(customers)
 
   return {
     props: {

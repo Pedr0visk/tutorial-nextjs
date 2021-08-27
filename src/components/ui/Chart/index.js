@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {default as RChart } from "react-apexcharts";
+// import {default as RChart } from "react-apexcharts";
 import PropTypes from 'prop-types'
 
 
@@ -8,11 +8,11 @@ const Chart = ({ type, options, series }) => {
     <div className="app">
       <div className="row">
         <div className="mixed-chart">
-          <RChart
+          {/* <RChart
             options={options}
             series={series}
             type={type}
-          />
+          /> */}
         </div>
       </div>
     </div>

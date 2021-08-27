@@ -5,6 +5,7 @@ export const Navbar = styled.ul`
 	height: 100%;
 	display: flex;
 	align-items: center;
+	position: relative;
 `
 
 export const NavbarItem = styled.li`
@@ -14,8 +15,22 @@ export const NavbarItem = styled.li`
 `
 
 export const DropdownMenu = styled.div`
-	display: none;
+	opacity: 1;
+	min-width: 800px;
+	padding: 25px 25px 20px;
+	position: absolute;
+	background: white;
+	top: 50px;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+	z-index: 1030;
+	height: 82vh;
+
+	> p {
+		font-size: 12px;
+	}
 `
+
+export const FilterBox = styled.div``
 
 export const DropdownBtn = styled.button`
 	display: flex;

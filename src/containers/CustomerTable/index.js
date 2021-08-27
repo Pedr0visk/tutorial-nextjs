@@ -5,7 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
 
 const CustomerTable = ({ data }) => {
-	const fields = ['Nome','E-mail', 'Telefone', 'Inclusão']
+	const fields = [
+		{attr: 'name', label: 'Nome'},
+		{attr: 'email', label: 'E-mail'},
+		{attr: 'phone_number', label: 'Telefone'},
+		{attr: 'created_at', label: 'Inclusão'},
+	]
 
 	return (
 		<Container className="mb-10">

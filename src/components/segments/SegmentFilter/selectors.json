@@ -1,0 +1,109 @@
+[
+  {
+    "id": 1,
+    "name": "Produto",
+    "options": [
+      {
+        "parent": null,
+        "id": 101,
+        "name": "Jogos"
+      },
+      {
+        "parent": null,
+        "id": 102,
+        "name": "Educação"
+      },
+      {
+        "parent": null,
+        "id": 103,
+        "name": "Negócios e Serviço"
+      },
+      {
+        "parent": null,
+        "id": 104,
+        "name": "Tecnologia"
+      },
+      {
+        "parent": {
+          "id": 11,
+          "name": "Vestuário e Moda"
+        },
+        "id": 105,
+        "name": "Vestuário Infantil"
+      },
+      {
+        "parent": {
+          "id": 11,
+          "name": "Vestuário e Moda"
+        },
+        "id": 106,
+        "name": "Vestuário Masuculino"
+      },
+      {
+        "parent": {
+          "id": 11,
+          "name": "Vestuário e Moda"
+        },
+        "id": 107,
+        "name": "Vestuário Feminino"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Marca",
+    "options": [
+      {
+        "parent": null,
+        "id": 201,
+        "name": "Eletrônicos"
+      },
+      {
+        "parent": null,
+        "id": 202,
+        "name": "Eletrodomésticos"
+      },
+      {
+        "parent": {
+          "id": 21,
+          "name": "Eletrônicos"
+        },
+        "id": 203,
+        "name": "Sony"
+      },
+      {
+        "parent": {
+          "id": 21,
+          "name": "LG"
+        },
+        "id": 204,
+        "name": "Sony"
+      },
+      {
+        "parent": {
+          "id": 21,
+          "name": "Eletrônicos"
+        },
+        "id": 205,
+        "name": "Samsung"
+      },
+      {
+        "parent": {
+          "id": 22,
+          "name": "Eletrodomésticos"
+        },
+        "id": 206,
+        "name": "Tramontina"
+      },
+      {
+        "parent": {
+          "id": 22,
+          "name": "Eletrodomésticos"
+        },
+        "id": 207,
+        "name": "Fisher"
+      }
+      
+    ]
+  }
+]
