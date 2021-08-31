@@ -26,7 +26,18 @@ const Table = ({ items, fields }) => {
 				{items.map((item, index) => {
 					return (
 						<tr key={index}>
-							{fields.map(field => (<td key={item[field.attr]}><Link className="link" href={`/profile/${item.id}`}>{item[field.attr]}</Link></td>))}
+							{fields.map(field => {
+								if (item[field.attr]) {
+									return (
+										<td key={item._id}><Link className="link" href={`/profile/${item._id}`}>{item[field.attr]}</Link></td>
+									)
+								} else {
+									return (
+										<td key={item._id}><Link className="link" href={`/profile/${item._id}`}>--</Link></td>
+									)
+								}
+								
+							})}
 						</tr>
 					)
 				})}

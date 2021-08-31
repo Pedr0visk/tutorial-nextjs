@@ -73,10 +73,10 @@ const CustomerProfile = ({ customer }) => {
         </Profile>
      
         {/* Demographic Data */}
-        {customer.data && <CustomerDemographic customer={customer} />}
+        {customer.demographic && <CustomerDemographic customer={customer} />}
 
-        {/* Sessesion Data */}
-        {customer.data && <CustomerSessions customer={customer} />}
+        {/* session Data */}
+        {customer.interests && <CustomerSessions customer={customer} />}
       </div>
     </Layout>
   )

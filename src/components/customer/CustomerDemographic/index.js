@@ -10,22 +10,22 @@ const CustomerDemographic = ({ customer }) => {
 				<div className="grid grid-cols-4 space-x-10">
 					{/* block 1 */}
 					<div>
-						<Attribute property="País" value={customer.data.locale.country || '--'} />
-						<Attribute property="Estado" value={customer.data.locale.state || '--'} />
-						<Attribute property="Cidade" value={customer.data.locale.city || '--'} />
+						<Attribute property="País" value={customer.location.country || '--'} />
+						<Attribute property="Estado" value={customer.location.state || '--'} />
+						<Attribute property="Cidade" value={customer.location.city || '--'} />
 					</div>
 
 					{/* block 2 */}
 					<div>
-						<Attribute property="Faixa Etária" value={customer.data.demographic.age.pt || '--'} />
-						<Attribute property="Escolaridade" value={customer.data.demographic.education.pt || '--'} />
-						<Attribute property="Estado Civil" value={customer.data.demographic.marital.pt || '--'} />
+						<Attribute property="Faixa Etária" value={customer.demographic.age.translations.pt || '--'} />
+						<Attribute property="Escolaridade" value={customer.demographic.education.translations.pt || '--'} />
+						<Attribute property="Estado Civil" value={customer.demographic.marital.translations.pt || '--'} />
 					</div>
 
 					{/* block 3 */}
 					<div>
-						<Attribute property="Genêro" value={customer.data.demographic.gender.pt || '--'} />
-						<Attribute property="Classe Social" value={customer.data.demographic.income.pt || '--'} />
+						<Attribute property="Genêro" value={customer.demographic.gender.translations.pt || '--'} />
+						<Attribute property="Classe Social" value={customer.demographic.income.translations.pt || '--'} />
 						<Attribute property="Dispositivos" value="--" />
 					</div>
 					

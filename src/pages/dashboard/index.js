@@ -78,13 +78,19 @@ export async function getStaticProps(context) {
     }
   }
 
-	const customers = data.results.map(customer => ({
-		id: customer._id,
-		email: customer.attributes?.email || '',
-		name: customer.attributes?.name || '',
-		phone_number: customer.attributes?.phone_number || '--',
-		created_at: customer.created_at,
-	}))
+  const customers = data.results.map(obj => {
+    let customer = {}
+
+    customer._id = obj._id 
+    customer.created_at = obj.created_at 
+
+    for (let key in obj.attributes) {
+      customer[key] = obj.attributes[key]
+    }
+
+    console.log(customer, 'loggin customer')
+    return customer
+  })
 
   return {
     props: {

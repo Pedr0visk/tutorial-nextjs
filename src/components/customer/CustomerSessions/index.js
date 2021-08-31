@@ -70,22 +70,19 @@ const CustomerSessions = ({ customer }) => {
 						<SectionContent>
 							<Tabs> 
 								<div label="Conteúdo"> 
-									<Bar className="mb-8" width={1} label="Moda e Beleza" />
-									<Bar className="mb-8" width={0.7} label="Esportes" />
-									<Bar className="mb-8" width={0.55} label="Notícias" />
-									<Bar className="mb-8" width={0.35} label="Motos" />
+									{customer.interests.slice(0, 4).map(p => (
+										<Bar className="mb-8" width={0.8} label={p.translations.pt} />
+									))}
 								</div> 
 								<div label="Produtos"> 
-									<Bar className="mb-8" width={0.5} label="Moda e Beleza" />
-									<Bar className="mb-8" width={1} label="Esportes" />
-									<Bar className="mb-8" width={0.6} label="Notícias" />
-									<Bar className="mb-8" width={0.5} label="Motos" />
+									{customer.products.slice(0, 4).map(p => (
+										<Bar className="mb-8" width={0.8} label={p.translations.pt} />
+									))}
 								</div> 
-								<div label="Marcos"> 
-									<Bar className="mb-8" width={0.8} label="Moda e Beleza" />
-									<Bar className="mb-8" width={0.2} label="Esportes" />
-									<Bar className="mb-8" width={1} label="Notícias" />
-									<Bar className="mb-8" width={0.65} label="Motos" /> 
+								<div label="Marcas"> 
+									{customer.brands.slice(0, 4).map(p => (
+										<Bar className="mb-8" width={0.8} label={p.translations.pt} />
+									))}
 								</div> 
 							</Tabs> 
 						</SectionContent>
