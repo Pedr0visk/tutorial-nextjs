@@ -8,6 +8,7 @@ export const Select = styled.div`
 	vertical-align: middle;
 	margin-right: 10px;
 	position: relative;
+	z-index: 1030;
 `
 
 export const SelectorName = styled.button`
@@ -95,9 +96,9 @@ export const OptionAction = styled.div`
 			filter: saturate(1%);
 		}
 
-		&:first-child {
+		/* &:first-child {
 			margin-right: 10px;
-		}
+		} */
 	}
 
 `
@@ -138,6 +139,8 @@ export const SIcon = styled.div`
 
 export const SContent = styled.div`
 	padding: 1rem 0;
+	display: flex;
+	flex-direction: column;
 `
 
 export const SOption = styled.div`
@@ -146,10 +149,11 @@ export const SOption = styled.div`
 	padding-top: 2px;
 	padding-bottom: 2px;
 	padding-left: 10px;
-	margin-right: 10px;
-	margin-bottom: 10px;
+	margin-right: 5px;
+	margin-bottom: 5px;
 	font-size: 13px;
 	display: inline-block;
+	background-color: white;
 `
 
 export const SOptionRemove = styled.button`
@@ -179,5 +183,24 @@ export const ClearAllBtn = styled.button`
 	> svg {
 		margin-right: 5px;
 		color: var(--danger);
+	}
+`
+
+export const SSWrapper = styled.div`
+	background-color: #f2f2f2;
+	padding: 0.5rem;
+	border-radius: 2px;
+	margin-bottom: .5rem;
+	margin-right: 5px;
+	display: inline-block;
+	position: relative;
+	max-width: 300px;
+
+	> h4 {
+		font-size: 12px;
+		text-transform: capitalize;
+		color: var(--title);
+		margin-bottom: 5px;
+		font-weight: bold;
 	}
 `

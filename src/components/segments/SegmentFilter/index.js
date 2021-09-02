@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import { 
 	Select, 
 	SelectorName, 
@@ -13,6 +14,7 @@ import {
 	SContent,
 	SOption,
 	SOptionRemove,
+	SSWrapper,
 	FilterAction,
 	ClearAllBtn
 } from './styles'
@@ -51,23 +53,24 @@ const Option = ({ value, text, parent, onClickHandler }) => {
 				<AddButton onClick={addItem}>
 					<FontAwesomeIcon icon={faPlus} />
 				</AddButton>
-				<RemoveButton onClick={removeItem}>
+				{/* <RemoveButton onClick={removeItem}>
 					<FontAwesomeIcon icon={faMinus} />
-				</RemoveButton>
+				</RemoveButton> */}
 			</OptionAction>
 		</OptionItem>
 	)
 }
 
-const Selector = ({ name, options, segmentsChoosen, chooseSegment }) => {
+const Selector = ({ id, name, options, segmentsChoosen, chooseSegment }) => {
 	const [items, setItems] = useState([])
-	const [cache, setCache] = useState([])
 	const [show, toggleOptions] = useState(false)
 
 	function addOrRemoveItem(action, item) {
 		if (action) {
 			setItems([...items, item])
-			chooseSegment([...segmentsChoosen, item])
+			let cache = segmentsChoosen[id]
+			let oldSegments = [...cache, item]
+			chooseSegment({...segmentsChoosen, [id]: oldSegments})
 			toggleOptions(false)
 		} else {
 			let newItems = items.filter(option => option.value != item.value)
@@ -84,13 +87,13 @@ const Selector = ({ name, options, segmentsChoosen, chooseSegment }) => {
 			</SelectorName>
 			{show && (
 				<Options >
-					{options.map(option => {
+					{options.map((option, index) => {
 						return (
 							<Option 
 								value={option.id} 
 								text={option.name} 
 								parent={option.parent} 
-								key={option.id} 
+								key={index} 
 								onClickHandler={addOrRemoveItem}
 							/>
 						)
@@ -101,25 +104,61 @@ const Selector = ({ name, options, segmentsChoosen, chooseSegment }) => {
 	)
 }
 
-const SegmentFilter = ({}) => {
-	const [segmentsChoosen, chooseSegment] = useState([])
+const fetcher = url => fetch(url).then(r => r.json())
 
-	if (!selectors) {
-		return 'loading'
-	}
+const SegmentFilter = ({segmentsChoosen, chooseSegment, submit}) => {
 
-	function removeSegment(segment) {
-		let lastSegments = segmentsChoosen.filter(s => s.value !== segment.value)
-		chooseSegment(lastSegments)
+	const [loading, setLoading] = useState(false)
+	const { data, error } = useSWR('http://localhost:3050/api/taxonomies/', fetcher)
+
+	if (error) return <div>failed to load</div>
+  if (!data) return <div>loading selectors...</div>
+
+	let selectors = []
+
+	let products = {name: 'Produtos', options: [], id: 'products'}
+	let brands = {name: 'Marcas', options: [], id: 'brands'}
+	let interests = {name: 'Conteúdo', options: [], id: 'interests'}
+	
+	data.map(taxonomy => {
+		const opt = {
+			parent: taxonomy.parent,
+			id: taxonomy.cid,
+			name: taxonomy.translations.pt,
+		}
+
+		switch(taxonomy.category) {
+			case 'product':
+				products.options.push(opt)
+				break;
+			case 'brand':
+				brands.options.push(opt)
+				break;
+			case 'interest':
+				interests.options.push(opt)
+				break;
+			default:
+				break;
+		}
+	})
+
+	selectors.push(products)
+	selectors.push(brands)
+	selectors.push(interests)
+
+	function removeSelected(segment, item) {
+		let lastItems = segmentsChoosen[segment].filter(s => s.value !== item.value)
+		chooseSegment({ ...segmentsChoosen, [segment]: lastItems })
 	}
 
 	return (
 		<div className="mt-4">
-			{selectors.map(select => (
+			{selectors.map((select, index) => (
 				<Selector 
+					id={select.id}
 					segmentsChoosen={segmentsChoosen}
 					chooseSegment={chooseSegment}
-					key={select.id} 
+					key={index} 
 					name={select.name} 
 					options={select.options}
 				/>
@@ -132,24 +171,37 @@ const SegmentFilter = ({}) => {
 					<h4>Aundiências inclusas</h4>
 				</STitle>
 				<SContent>
-					{segmentsChoosen.map(segment => {
-						return (
-							<SOption key={segment.value}>
-								{segment.text} 
-								<SOptionRemove onClick={e => removeSegment(segment)}>
-									<FontAwesomeIcon icon={faTimes} />
-								</SOptionRemove>
-							</SOption>
-						)
+					{Object.keys(segmentsChoosen).map((key, index) => {
+						if (segmentsChoosen[key].length < 1) {
+							return undefined
+						} else {
+							return (
+								<SSWrapper key={index}>
+									<h4>{key}</h4>
+									{segmentsChoosen[key].map((item, index) => (
+										<SOption key={index}>
+											{item.text} 
+											<SOptionRemove onClick={e => removeSelected(key, item)}>
+												<FontAwesomeIcon icon={faTimes} />
+											</SOptionRemove>
+										</SOption>
+									))}
+								</SSWrapper>
+							)
+						}
 					})}
 					
 				</SContent>
 				<FilterAction>
-					<ClearAllBtn onClick={e => chooseSegment([])}>
+					<ClearAllBtn onClick={e => chooseSegment({
+							products: [],
+							segments: [],
+							interests: []
+						})}>
 						<FontAwesomeIcon icon={faTrashAlt} />
 						remove all
 					</ClearAllBtn>
-					<UIButton title="Apply" />
+					<UIButton title="Apply" onClickHandler={submit} />
 				</FilterAction>
 			</div>
 		</div>

@@ -17,16 +17,22 @@ export const Paginator = styled.div`
 		font-weight: 600;
 		color: #2B2F3A;
 
-		a {
-			padding: 0.2rem 0.5rem;
+		button {
+			padding: 0 0.5rem;
 			line-height: 30px;
 			transition: .1s ease;
 			margin-right: 3px;
+
+			&:disabled {
+				svg {
+					color: #e2e2e2;
+				}
+			}
 			
-			&:hover {
+			/* &:hover {
 				background: var(--primary);
 				color: white;
-			}
+			} */
 			> svg {
 				font-size: 10px;
 			}

@@ -9,9 +9,9 @@ const Table = ({ items, fields }) => {
 		<TableContainer className="">
 			<thead>
 				<tr>
-					{fields.map(field => {
+					{fields.map((field, index) => {
 						return (
-							<th key={field.attr}>
+							<th key={index}>
 								{field.label}
 								<Caret>
 									<FontAwesomeIcon icon={faCaretUp} />
@@ -26,10 +26,10 @@ const Table = ({ items, fields }) => {
 				{items.map((item, index) => {
 					return (
 						<tr key={index}>
-							{fields.map(field => {
+							{fields.map((field, index) => {
 								if (item[field.attr]) {
 									return (
-										<td key={item._id}><Link className="link" href={`/profile/${item._id}`}>{item[field.attr]}</Link></td>
+										<td key={index}><Link className="link" href={`/profile/${item._id}`}>{item[field.attr]}</Link></td>
 									)
 								} else {
 									return (

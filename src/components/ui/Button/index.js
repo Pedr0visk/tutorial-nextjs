@@ -3,7 +3,7 @@ import { UIButton } from './styles'
 
 const Button = ({ title, onClickHandler}) => {
 	return (
-		<UIButton>
+		<UIButton onClick={onClickHandler}>
 			{title}
 		</UIButton>
 	)
