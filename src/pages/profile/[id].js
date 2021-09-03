@@ -18,12 +18,15 @@ import { Attribute } from '../../components/foundation'
 import CustomerDemographic from '../../components/customer/CustomerDemographic'
 import CustomerSessions from '../../components/customer/CustomerSessions'
 
+import { useRouter } from 'next/router'
+
 
 const CustomerProfile = ({ customer }) => {
-
 	const [lang, setLang] = useState('pt')
 
 	function getCustomerFullName(name = '') {
+		if (name === '') return 'unknow'
+
 		let chunks = name.split(' ')
 		let fullName = ''
 		for (let index in chunks) {
@@ -34,6 +37,8 @@ const CustomerProfile = ({ customer }) => {
 	}
 
 	function getCustomerAttr(attr) {
+		if (!customer.attributes) return '--'
+
 		return customer.attributes[attr] || '--'
 	}
 
@@ -85,14 +90,13 @@ const CustomerProfile = ({ customer }) => {
 export const getStaticPaths = async () => {
 	const response = await fetch(`${process.env.HOST}/api/customers/`)
 	const data = await response.json()
-	console.log(data)
 	const paths = data.results.map(customer => {
 		return { params: { id: customer._id }}
 	})
 
 	return {
 		paths,
-		fallback: true
+		fallback: false
 	}
 }
 
@@ -102,7 +106,11 @@ export const getStaticProps = async (context) => {
 	const response = await fetch(`${process.env.HOST}/api/customers/${id}/`)
 	const data = await response.json()
 
-	console.log(data)
+	if (!data) {
+    return {
+      notFound: true,
+    }
+  }
 
 	return {
 		props: {
