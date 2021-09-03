@@ -85,14 +85,14 @@ const CustomerProfile = ({ customer }) => {
 export const getStaticPaths = async () => {
 	const response = await fetch(`${process.env.HOST}/api/customers/`)
 	const data = await response.json()
-
+	console.log(data)
 	const paths = data.results.map(customer => {
 		return { params: { id: customer._id }}
 	})
 
 	return {
 		paths,
-		fallback: false
+		fallback: true
 	}
 }
 

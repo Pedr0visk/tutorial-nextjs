@@ -70,18 +70,18 @@ const CustomerSessions = ({ customer }) => {
 						<SectionContent>
 							<Tabs> 
 								<div label="Conteúdo"> 
-									{customer.interests.slice(0, 4).map(p => (
-										<Bar className="mb-8" width={0.8} label={p.translations.pt} />
+									{customer.interests.slice(0, 4).map((p, index) => (
+										<Bar key={index} className="mb-8" width={0.8} label={p.translations.pt} />
 									))}
 								</div> 
 								<div label="Produtos"> 
-									{customer.products.slice(0, 4).map(p => (
-										<Bar className="mb-8" width={0.8} label={p.translations.pt} />
+									{customer.products.slice(0, 4).map((p, index) => (
+										<Bar key={index} className="mb-8" width={0.8} label={p.translations.pt} />
 									))}
 								</div> 
 								<div label="Marcas"> 
-									{customer.brands.slice(0, 4).map(p => (
-										<Bar className="mb-8" width={0.8} label={p.translations.pt} />
+									{customer.brands.slice(0, 4).map((p, index) => (
+										<Bar key={index} className="mb-8" width={0.8} label={p.translations.pt} />
 									))}
 								</div> 
 							</Tabs> 
