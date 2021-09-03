@@ -111,7 +111,7 @@ const Dashboard = ({ customers }) => {
 				<Head title="Dashboard" subtitle="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis aspernatur iste laboriosam obcaecati, distinctio sapiente consequuntur et ad consectetur vel!" />
 
 				<WidgetsCustomers />
-				{!loading && <CustomerTable data={dataset} page_size={2} />}
+				{!loading && <CustomerTable data={dataset} page_size={30} />}
 				{loading && <LoadingGif />}
 			</div>
     </Layout>
@@ -120,7 +120,7 @@ const Dashboard = ({ customers }) => {
 
 export async function getServerSideProps({ query: { page = 1, products, brands, interests }}) {
 	const { HOST } = process.env
-	const pageSize = 2
+	const pageSize = 30
 
 	let queryParams = `?page=${page}&page_size=${pageSize}`
 	
