@@ -18,11 +18,11 @@ import {
 	FilterAction,
 	ClearAllBtn
 } from './styles'
-import selectors from  './selectors.json'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown, faCaretUp, faChevronRight, faMinus, faPlus, faTimes, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { UIButton } from '../../../components/ui'
+import taxonomies from  '../../../assets/taxonomies.json'
 
 
 const Option = ({ value, text, parent, onClickHandler }) => {
@@ -108,19 +108,20 @@ const fetcher = url => fetch(url).then(r => r.json())
 
 const SegmentFilter = ({segmentsChoosen, chooseSegment, submit}) => {
 
-	const [loading, setLoading] = useState(false)
-	const { data, error } = useSWR(`${process.env.apiUrl}/api/taxonomies/`, fetcher)
+	// const [loading, setLoading] = useState(false)
+	// const { data, error } = useSWR(`${process.env.apiUrl}/api/taxonomies/`, fetcher)
 
-	if (error) return <div>failed to load</div>
-  if (!data) return <div>loading selectors...</div>
+	// if (error) return <div>failed to load</div>
+  // if (!data) return <div>loading selectors...</div>
 
 	let selectors = []
 
 	let products = {name: 'Produtos', options: [], id: 'products'}
 	let brands = {name: 'Marcas', options: [], id: 'brands'}
 	let interests = {name: 'Conteúdo', options: [], id: 'interests'}
+
 	
-	data.map(taxonomy => {
+	taxonomies.map(taxonomy => {
 		const opt = {
 			parent: taxonomy.parent,
 			id: taxonomy.cid,
