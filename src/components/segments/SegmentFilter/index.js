@@ -109,7 +109,7 @@ const fetcher = url => fetch(url).then(r => r.json())
 const SegmentFilter = ({segmentsChoosen, chooseSegment, submit}) => {
 
 	const [loading, setLoading] = useState(false)
-	const { data, error } = useSWR('http://localhost:3050/api/taxonomies/', fetcher)
+	const { data, error } = useSWR(`${process.env.apiUrl}/api/taxonomies/`, fetcher)
 
 	if (error) return <div>failed to load</div>
   if (!data) return <div>loading selectors...</div>
