@@ -8,6 +8,10 @@ export default createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+	p {
+		margin: 0;
+	}
   
   a {
     text-decoration: none;
@@ -36,6 +40,7 @@ export default createGlobalStyle`
     --text: #4C536580;
 
 		--danger: #ce0000;
+		--success: #3bb74a;
   }
 
   @font-face {

@@ -1,151 +1,76 @@
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
+
 import { 
-	Select, 
-	SelectorName, 
-	Options, 
-	OptionItem, 
-	AddButton, 
-	RemoveButton,
-	OptionAction,
-	OptionText,
 	STitle,
 	SIcon,
 	SContent,
 	SOption,
 	SOptionRemove,
 	SSWrapper,
-	FilterAction,
-	ClearAllBtn
+	SBody
 } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown, faCaretUp, faChevronRight, faMinus, faPlus, faTimes, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-
-import { UIButton } from '../../../components/ui'
-import taxonomies from  '../../../assets/taxonomies.json'
+import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
+import SegmentSelector from '../SegmentSelector'
 
 
-const Option = ({ value, text, parent, onClickHandler }) => {
+const SegmentFilter = ({segmentsChoosen = [], chooseSegment, taxonomies}) => {
+	const [showRuler, setShowRuler] = useState(false)
+	const [selectors, setSelectors] = useState([])
+	const [andOr, setEndOr] = useState(true)
+	const [openedSelector, setOpenedSelector] = useState('')
 
-	function addItem() {
-		onClickHandler(1, {value, text})
-	}
+	useEffect(() => {
+		let sum = 0
+		for (let seg in segmentsChoosen) {
+			if (segmentsChoosen[seg].length > 0) {
+				sum += 1
+			}
+		}
 
-	function removeItem() {
-		onClickHandler(0, {value, text})
-	}
-
-	return (
-		<OptionItem id={value}>
-			{parent && (
-				<>
-					<small><span className="parent-name">{parent.name}</span></small>
-					<div className="parent-separator">
-						<FontAwesomeIcon icon={faChevronRight} />
-					</div>
-				</>
-			)}
-			
-			<OptionText>
-				{text}
-			</OptionText>
-			<OptionAction>
-				<AddButton onClick={addItem}>
-					<FontAwesomeIcon icon={faPlus} />
-				</AddButton>
-				{/* <RemoveButton onClick={removeItem}>
-					<FontAwesomeIcon icon={faMinus} />
-				</RemoveButton> */}
-			</OptionAction>
-		</OptionItem>
-	)
-}
-
-const Selector = ({ id, name, options, segmentsChoosen, chooseSegment }) => {
-	const [items, setItems] = useState([])
-	const [show, toggleOptions] = useState(false)
-
-	function addOrRemoveItem(action, item) {
-		if (action) {
-			setItems([...items, item])
-			let cache = segmentsChoosen[id]
-			let oldSegments = [...cache, item]
-			chooseSegment({...segmentsChoosen, [id]: oldSegments})
-			toggleOptions(false)
+		if (sum > 1) {
+			setShowRuler(true)
 		} else {
-			let newItems = items.filter(option => option.value != item.value)
-			let newSegmentsChoosen = segmentsChoosen.filter(segment => segment != item)
-			setItems(newItems)
-			chooseSegment(newSegmentsChoosen)
+			setShowRuler(false)
 		}
-	}
+	}, [segmentsChoosen])
 
-	return (
-		<Select>
-			<SelectorName onClick={e => toggleOptions(!show)}>
-				{name} <FontAwesomeIcon icon={faCaretDown} /> 
-			</SelectorName>
-			{show && (
-				<Options >
-					{options.map((option, index) => {
-						return (
-							<Option 
-								value={option.id} 
-								text={option.name} 
-								parent={option.parent} 
-								key={index} 
-								onClickHandler={addOrRemoveItem}
-							/>
-						)
-					}
-				)}
-			</Options>)}
-		</Select>
-	)
-}
-
-const fetcher = url => fetch(url).then(r => r.json())
-
-const SegmentFilter = ({segmentsChoosen, chooseSegment, submit}) => {
-
-	// const [loading, setLoading] = useState(false)
-	// const { data, error } = useSWR(`${process.env.apiUrl}/api/taxonomies/`, fetcher)
-
-	// if (error) return <div>failed to load</div>
-  // if (!data) return <div>loading selectors...</div>
-
-	let selectors = []
-
-	let products = {name: 'Produtos', options: [], id: 'products'}
-	let brands = {name: 'Marcas', options: [], id: 'brands'}
-	let interests = {name: 'Conteúdo', options: [], id: 'interests'}
-
+	useEffect(() => {
+		let products = {name: 'Produtos', options: [], id: 'products'}
+		let brands = {name: 'Marcas', options: [], id: 'brands'}
+		let interests = {name: 'Conteúdo', options: [], id: 'interests'}
+		
+		taxonomies.map(taxonomy => {
+			const opt = {
+				parent: taxonomy.parent,
+				id: taxonomy.cid,
+				name: taxonomy.translations.pt,
+				category: taxonomy.category + 's'
+			}
 	
-	taxonomies.map(taxonomy => {
-		const opt = {
-			parent: taxonomy.parent,
-			id: taxonomy.cid,
-			name: taxonomy.translations.pt,
-		}
+			switch(taxonomy.category) {
+				case 'product':
+					products.options.push(opt)
+					break;
+				case 'brand':
+					brands.options.push(opt)
+					break;
+				case 'interest':
+					interests.options.push(opt)
+					break;
+				default:
+					break;
+			}
+		})
+		setSelectors([products, brands, interests])
+	}, [taxonomies])
 
-		switch(taxonomy.category) {
-			case 'product':
-				products.options.push(opt)
-				break;
-			case 'brand':
-				brands.options.push(opt)
-				break;
-			case 'interest':
-				interests.options.push(opt)
-				break;
-			default:
-				break;
-		}
-	})
-
-	selectors.push(products)
-	selectors.push(brands)
-	selectors.push(interests)
+	function selectSegment(item) {
+		let cache = segmentsChoosen[item.category]
+		let oldSegments = [...cache, item]
+		chooseSegment({...segmentsChoosen, [item.category]: oldSegments})
+	}
 
 	function removeSelected(segment, item) {
 		let lastItems = segmentsChoosen[segment].filter(s => s.value !== item.value)
@@ -154,56 +79,56 @@ const SegmentFilter = ({segmentsChoosen, chooseSegment, submit}) => {
 
 	return (
 		<div className="mt-4">
-			{selectors.map((select, index) => (
-				<Selector 
-					id={select.id}
-					segmentsChoosen={segmentsChoosen}
-					chooseSegment={chooseSegment}
-					key={index} 
-					name={select.name} 
-					options={select.options}
-				/>
-			))}
+			<div className="d-flex align-items-start">
+				{selectors.map((select, index) => (
+					<SegmentSelector
+						data={select}
+						key={index} 
+						toggleSelector={setOpenedSelector}
+						selectSegment={selectSegment}
+						opened={openedSelector === select.name}
+						segmentsChoosen={segmentsChoosen}
+						chooseSegment={chooseSegment}
+					/>
+				))}
+			</div>
 			<div className="py-4">
-				<STitle>
+				<STitle className="mb-5">
 					<SIcon>
 						<FontAwesomeIcon icon={faPlus} />
 					</SIcon>
 					<h4>Aundiências inclusas</h4>
 				</STitle>
-				<SContent>
-					{Object.keys(segmentsChoosen).map((key, index) => {
-						if (segmentsChoosen[key].length < 1) {
-							return undefined
-						} else {
-							return (
-								<SSWrapper key={index}>
-									<h4>{key}</h4>
-									{segmentsChoosen[key].map((item, index) => (
-										<SOption key={index}>
-											{item.text} 
-											<SOptionRemove onClick={e => removeSelected(key, item)}>
-												<FontAwesomeIcon icon={faTimes} />
-											</SOptionRemove>
-										</SOption>
-									))}
-								</SSWrapper>
-							)
-						}
-					})}
-					
-				</SContent>
-				<FilterAction>
-					<ClearAllBtn onClick={e => chooseSegment({
-							products: [],
-							segments: [],
-							interests: []
-						})}>
-						<FontAwesomeIcon icon={faTrashAlt} />
-						remove all
-					</ClearAllBtn>
-					<UIButton title="Apply" onClickHandler={submit} />
-				</FilterAction>
+				
+				<SBody endOr={andOr} showRuler={showRuler}>
+					{showRuler && <button className="ruler" onClick={e => setEndOr(!andOr)}>{andOr ? 'E' : 'OU'}</button>}
+
+					<SContent endOr={andOr} showRuler={showRuler}>
+						{Object.keys(segmentsChoosen).map((key, index) => {
+							if (segmentsChoosen[key].length < 1) {
+								return undefined
+							} else {
+								return (
+									<SSWrapper key={index}>
+										<div className="ruler">
+											<h4>{key}</h4>
+											<button>OU</button>
+										</div>
+										{segmentsChoosen[key].map((item, index) => (
+											<SOption key={index}>
+												{item.name} 
+												<SOptionRemove onClick={e => removeSelected(key, item)}>
+													<FontAwesomeIcon icon={faTimes} />
+												</SOptionRemove>
+											</SOption>
+										))}
+									</SSWrapper>
+								)
+							}
+						})}
+					</SContent>
+				</SBody>
+
 			</div>
 		</div>
 	)

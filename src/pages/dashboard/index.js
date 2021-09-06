@@ -1,71 +1,103 @@
 import React, { useEffect, useState } from 'react'
-import useSWR from 'swr'
+import { Popover } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faChevronDown, faDownload, faFilter, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+
 import { 
   Navbar, 
-  NavbarItem, 
-  DropdownMenu, 
-  DropdownBtn,
-  Icon,
-  Text,
-  AriaLabel
+  NavbarItem,
+	DropdownBtn, 
+	Icon, 
+	Text, 
+	AriaLabel, 
+	FilterAction,
+	ClearAllBtn
 } from '../../styles/dashboard'
 
-import { Layout } from '../../containers'
-import { Breadcrumb, Head } from '../../components/patterns'
+import taxonomies from  '../../assets/taxonomies.json'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilter, faChevronDown, faFileArchive } from '@fortawesome/free-solid-svg-icons'
+import { Layout } from '../../containers'
 
 import WidgetsCustomers from '../../widgets/WidgetsCustomers'
 import CustomerTable from '../../containers/CustomerTable'
-import SearchField from '../../components/ui/SearchField'
+
+import { Breadcrumb, Head } from '../../components/patterns'
+import { UIButton, SearchField, LoadingGif} from '../../components/ui'
 import SegmentFilter from '../../components/segments/SegmentFilter'
-import LoadingGif from '../../components/ui/LoadingGif'
 
-import { useRouter } from 'next/router'
 
+const content = ({ segmentsChoosen, chooseSegment, filterCustomers }) => (
+  <div style={{width: 800, height: '75vh'}}>
+    <p>Faça uma busca ou selecione os filtros nas categorias abaixo:</p>
+		<SearchField />
+		<SegmentFilter 
+			taxonomies={taxonomies}
+			segmentsChoosen={segmentsChoosen} 
+			chooseSegment={chooseSegment} 
+			submit={filterCustomers} 
+		/>
+		<FilterAction>
+			<ClearAllBtn onClick={e => chooseSegment({
+					products: [],
+					segments: [],
+					interests: []
+				})}>
+				<FontAwesomeIcon icon={faTrashAlt} />
+				limpar seleção
+			</ClearAllBtn>
+			<UIButton title="aplicar" onClickHandler={filterCustomers} />
+		</FilterAction>
+  </div>
+);
 
 const Dashboard = ({ customers }) => {
 	const [dataset, setDataset] = useState([])
-	const [showDropdown, toggleDropdown] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [segmentsChoosen, chooseSegment] = useState({
 		interests: [],
 		products: [],
 		brands: []
 	})
-
-	const router = useRouter()
-
+	
 	useEffect(() => {
 		setDataset(customers)
-	}, [customers])
+	}, [])
 
-	async function filterCustomers() {
+	function _buildQueryParams(segments) {
 		let queryParams = ''
 
-		Object.keys(segmentsChoosen).map(key => {
-			if (segmentsChoosen[key].length > 0) {
-				let list = segmentsChoosen[key].map(item => item.value)
-				queryParams += `${key}=${list.join(',')}&`
+		Object.keys(segments).map(key => {
+			console.log(segments[key])
+			if (segments[key].length > 0) {
+				let list = segments[key].map(item => item.id)
+				queryParams += `${key}=${list.join(',')},in&`
 			}
 		})
 
-		toggleDropdown(false)
+		return queryParams
+	}
 
-		router.push(`/dashboard?${queryParams}`)
+	async function exportCustomers() {
+		const queryParams = _buildQueryParams(segmentsChoosen)
+		const uri = `${process.env.apiUrl}/api/customers/xlsx/export/?${queryParams}`
+		console.log(uri)
+		window.open(uri)
+	}
 
-		// try {
-		// 	setLoading(true)
-		// 	const uri = `http://localhost:3050/api/customers/?${queryParams}`
-		// 	const response = await fetch(uri)
-		// 	const data = await response.json()
-		// 	setDataset(data)
-		// } catch (error) {
-		// 	console.log(error)
-		// } finally {
-		// 	setLoading(false)
-		// }
+	async function filterCustomers() {
+		const queryParams = _buildQueryParams(segmentsChoosen)
+
+		try {
+			setLoading(true)
+			const uri = `${process.env.apiUrl}/api/customers/?${queryParams}`
+			const response = await fetch(uri)
+			const data = await response.json()
+			setDataset(data)
+		} catch (error) {
+			console.log(error)
+		} finally {
+			setLoading(false)
+		}
 	}
 
   return (
@@ -75,32 +107,21 @@ const Dashboard = ({ customers }) => {
 					{/* Segments */}
           <NavbarItem>
 						{/* Dropdown Btn */}
-            <DropdownBtn onClick={(e) => toggleDropdown(!showDropdown)}>
-              <Icon><FontAwesomeIcon icon={faFilter} /></Icon>
-              <Text>Segmentos</Text>
-              <AriaLabel><FontAwesomeIcon icon={faChevronDown} /></AriaLabel>
-            </DropdownBtn>
-
-						{/* Dropdown Menu */}
-            {showDropdown && (
-							<DropdownMenu >
-								<p>Faça uma busca ou selecione os filtros nas categorias abaixo:</p>
-								<SearchField />
-								<SegmentFilter 
-									segmentsChoosen={segmentsChoosen} 
-									chooseSegment={chooseSegment} 
-									submit={filterCustomers} 
-								/>
-								{/* <Segments /> */}
-							</DropdownMenu>
-						)}
+            {/* <Dropdown setDataset={setDataset} setLoading={setLoading} /> */}
+						<Popover placement="bottomRight" content={() => content({segmentsChoosen, chooseSegment, filterCustomers})} trigger="click">
+							<DropdownBtn>
+								<Icon><FontAwesomeIcon icon={faFilter} /></Icon>
+								<Text>Segmentos</Text>
+								<AriaLabel><FontAwesomeIcon icon={faChevronDown} /></AriaLabel>
+							</DropdownBtn>
+						</Popover>
           </NavbarItem>
 
 					{/* Segments Explorer */}
           <NavbarItem>
-            <DropdownBtn>
-              <Icon><FontAwesomeIcon icon={faFileArchive} /></Icon>
-              <Text>Explorar Segmentos</Text>
+            <DropdownBtn onClick={e => exportCustomers()}>
+              <div><FontAwesomeIcon icon={faDownload} /></div>
+              <p>Exportar Customers</p>
               <AriaLabel><FontAwesomeIcon icon={faChevronDown} /></AriaLabel>
             </DropdownBtn>
           </NavbarItem>
@@ -118,26 +139,11 @@ const Dashboard = ({ customers }) => {
   )
 }
 
-export async function getServerSideProps({ query: { page = 1, products, brands, interests }}) {
+export async function getStaticProps({ context }) {
 	const { HOST } = process.env
-	const pageSize = 30
-
-	let queryParams = `?page=${page}&page_size=${pageSize}`
 	
-	if (interests) {
-		queryParams += `&interests=${interests}`
-	}
-	if (brands) {
-		queryParams += `&brands=${brands}`
-	}
-	if (products) {
-		queryParams += `&products=${products}`
-	}
-
-	const res = await fetch(`${HOST}/api/customers/${queryParams}`)
+	const res = await fetch(`${HOST}/api/customers/`)
   const data = await res.json()
-
-	console.log(data)
 
 	if (!data) {
     return {

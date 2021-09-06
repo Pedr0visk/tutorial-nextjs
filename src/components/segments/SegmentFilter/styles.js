@@ -1,118 +1,6 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { colors } from '../../../styles/theme'
 
-
-export const Select = styled.div`
-	border-radius: 2px;
-	display: inline-block;
-	vertical-align: middle;
-	margin-right: 10px;
-	position: relative;
-	z-index: 1030;
-`
-
-export const SelectorName = styled.button`
-	font-size: 13px;
-	border: 1px solid rgba(140,140,140,0.25);
-	color: #565e75;
-	transition: .25s;
-	border-radius: 2px;
-	padding: 2px 10px;
-`
-
-export const Options = styled.ul`
-	background: white;
-	border: 1px solid rgba(140,140,140,0.25);
-	border-radius: 2px;
-	width: auto;
-	max-width: 600px;
-	max-height: 30vh;
-	overflow-y: scroll;
-
-	position: absolute;
-	top: 27px;
-	left: 0;
-
-	::-webkit-scrollbar {
-		width: 2px;
-	}
-
-	::-webkit-scrollbar {
-    width: 4px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--text);
-    border-radius: 4px;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: ${colors.borderLight};
-  }
-
-	.parent-name {
-		max-width: 100px;
-		display: block;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		overflow: hidden;
-	}
-
-	.parent-separator {
-		font-size: 8px;
-		padding: 0 5px;
-	}
-`
-
-export const OptionItem = styled.li`
-	font-size: 12px;
-	display: flex;
-	padding: 10px;
-	border-bottom: 1px solid ${colors.borderLight};
-	width: 100%;
-
-	display: flex;
-	align-items: center;
-
-`
-
-export const OptionText = styled.span`
-	font-weight: bold;
-	white-space: nowrap;
-`
-
-export const OptionAction = styled.div`
-	display: flex;
-	margin: 0 10px;
-	margin-left: auto;
-
-	> button {
-		width: 20px;
-		height: 20px;
-		border: 1px solid;
-		border-radius: 50%;
-		font-size: 8px;
-		color: white;
-
-		&:hover {
-			filter: saturate(1%);
-		}
-
-		/* &:first-child {
-			margin-right: 10px;
-		} */
-	}
-
-`
-
-export const AddButton = styled.button`
-	border-color: var(--primary);
-	background: var(--primary);
-	margin-left: 20px;
-`
-
-export const RemoveButton = styled.button`
-	border-color: var(--danger);
-	background: var(--danger);
-`
 
 export const STitle = styled.div`
 	display: flex;
@@ -138,9 +26,23 @@ export const SIcon = styled.div`
 `
 
 export const SContent = styled.div`
-	padding: 1rem 0;
 	display: flex;
 	flex-direction: column;
+	
+	
+	width: 300px;
+	background-color: white;
+
+	${props => props.showRuler && css`
+		margin-left: 36px;
+		padding-left: 10px;
+		border-left: 2px solid var(--success);
+		border-radius: 80px;
+  `}
+
+	${props => !props.endOr && css`
+    border-color: var(--primary);
+  `}
 `
 
 export const SOption = styled.div`
@@ -152,8 +54,8 @@ export const SOption = styled.div`
 	margin-right: 5px;
 	margin-bottom: 5px;
 	font-size: 13px;
-	display: inline-block;
 	background-color: white;
+	
 `
 
 export const SOptionRemove = styled.button`
@@ -161,46 +63,97 @@ export const SOptionRemove = styled.button`
 	padding: 0 10px;
 `
 
-export const FilterAction = styled.div`
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	right: 0;
-
-	padding: 1rem;
-	background-color: white;
-	border-radius: 4px;
-	border: 1px solid ${colors.borderLight};
-`
-
-export const ClearAllBtn = styled.button`
-	font-size: 13px;
-	color: var(--title);
-	
-	> svg {
-		margin-right: 5px;
-		color: var(--danger);
-	}
-`
-
 export const SSWrapper = styled.div`
 	background-color: #f2f2f2;
 	padding: 0.5rem;
 	border-radius: 2px;
-	margin-bottom: .5rem;
-	margin-right: 5px;
-	display: inline-block;
 	position: relative;
-	max-width: 300px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
 
-	> h4 {
+	> div.ruler {
+		display: flex;
 		font-size: 12px;
-		text-transform: capitalize;
-		color: var(--title);
-		margin-bottom: 5px;
-		font-weight: bold;
+		justify-content: space-between;
+		width: 100%;
+
+		> button {
+			color: var(--primary);
+			font-weight: bold;
+		}
+
+		> h4 {
+			text-transform: capitalize;
+			color: var(--title);
+			margin-bottom: 10px;
+			font-weight: bold;
+		}
+	}
+
+	&:after {
+		content: '';
+		top: 50%;
+		left: -10px;
+		width: 10px;
+		height: 2px;
+		background-color: var(--success);
+		position: absolute;
+	}
+
+	&:first-child, &:last-child {
+		&:after {
+			background-color: transparent;
+		}
+	}
+
+	&:not(:first-child) {
+		margin-top: .5rem;
+	}
+
+	
+`
+
+export const SBody = styled.div`
+	position: relative;
+	
+	> .ruler {
+		position: absolute;
+		left: 0;
+		top: 43%;
+		font-size: 13px;
+		text-transform: uppercase;
+		color: var(--success);
+		border: 1px solid var(--success);
+		border-radius: 3px;
+		width: 30px;
+		text-align: center;
+		display: none;
+
+		&:after {
+			content: '';
+			position: absolute;
+			right: -8px;
+			top: 50%;
+			width: 8px;
+			height: 2px;
+		}
+
+		${props => props.showRuler && css`
+			display: inline-block;
+
+			&:after {
+				background-color: var(--success);
+			}
+		`}
+
+		${props => !props.endOr && css`
+			border-color: var(--primary);
+			color: var(--primary);
+
+			&:after {
+				background-color: var(--primary);
+			}
+		`}
 	}
 `
