@@ -5,21 +5,26 @@ import {
 	STitle,
 	SIcon,
 	SContent,
-	SOption,
-	SOptionRemove,
-	SSWrapper,
 	SBody
 } from './styles'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 import SegmentSelector from '../SegmentSelector'
+import SegmentItem from '../SegmentItem'
 
 
-const SegmentFilter = ({segmentsChoosen = [], chooseSegment, taxonomies}) => {
-	const [showRuler, setShowRuler] = useState(false)
+const SegmentFilter = ({
+	segmentsChoosen = [], 
+	chooseSegment, 
+	taxonomies, 
+	setQueryParams, 
+	queryParams
+}) => {
+
 	const [selectors, setSelectors] = useState([])
-	const [andOr, setEndOr] = useState(true)
 	const [openedSelector, setOpenedSelector] = useState('')
+	const [showRule, toggleRule] = useState(false)
+	const [outerLogicalOperator, setOuterLogicalOperator] = useState(false)
 
 	useEffect(() => {
 		let sum = 0
@@ -30,9 +35,9 @@ const SegmentFilter = ({segmentsChoosen = [], chooseSegment, taxonomies}) => {
 		}
 
 		if (sum > 1) {
-			setShowRuler(true)
+			toggleRule(true)
 		} else {
-			setShowRuler(false)
+			toggleRule(false)
 		}
 	}, [segmentsChoosen])
 
@@ -63,6 +68,7 @@ const SegmentFilter = ({segmentsChoosen = [], chooseSegment, taxonomies}) => {
 					break;
 			}
 		})
+
 		setSelectors([products, brands, interests])
 	}, [taxonomies])
 
@@ -100,29 +106,28 @@ const SegmentFilter = ({segmentsChoosen = [], chooseSegment, taxonomies}) => {
 					<h4>Aundiências inclusas</h4>
 				</STitle>
 				
-				<SBody endOr={andOr} showRuler={showRuler}>
-					{showRuler && <button className="ruler" onClick={e => setEndOr(!andOr)}>{andOr ? 'E' : 'OU'}</button>}
-
-					<SContent endOr={andOr} showRuler={showRuler}>
-						{Object.keys(segmentsChoosen).map((key, index) => {
-							if (segmentsChoosen[key].length < 1) {
+				<SBody outerLogicalOperator={outerLogicalOperator} showRule={showRule}>
+					{/* show AND/OR Button */}
+					{
+						showRule && 
+						<button className="ruler" onClick={e => setOuterLogicalOperator(!outerLogicalOperator)}>
+							{outerLogicalOperator ? 'E' : 'OU'}
+						</button>
+					}
+					
+					<SContent outerLogicalOperator={outerLogicalOperator} showRule={showRule}>
+						{Object.keys(segmentsChoosen).map((segment, index) => {
+							if (segmentsChoosen[segment].length < 1) {
 								return undefined
 							} else {
 								return (
-									<SSWrapper key={index}>
-										<div className="ruler">
-											<h4>{key}</h4>
-											<button>OU</button>
-										</div>
-										{segmentsChoosen[key].map((item, index) => (
-											<SOption key={index}>
-												{item.name} 
-												<SOptionRemove onClick={e => removeSelected(key, item)}>
-													<FontAwesomeIcon icon={faTimes} />
-												</SOptionRemove>
-											</SOption>
-										))}
-									</SSWrapper>
+									<SegmentItem
+										key={index}
+										segmentsChoosen={segmentsChoosen}
+										segment={segment}
+										index={index}
+										removeSelected={removeSelected}
+									/>
 								)
 							}
 						})}

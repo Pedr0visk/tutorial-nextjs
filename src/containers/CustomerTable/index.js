@@ -5,11 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faChevronRight, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import { useRouter } from 'next/router'
 
-const CustomerTable = ({ data, page_size }) => {
+const CustomerTable = ({ data, filterCustomers, queryParams, setQueryParams }) => {
 	const [customers, setCustomers] = useState([])
 	const router = useRouter()
-
-	let { page, interests, brands, products } = router.query
+	let { page, interests, brands, products, page_size } = queryParams
 
 	useEffect(() => {
 		if (data.results) {
@@ -30,7 +29,6 @@ const CustomerTable = ({ data, page_size }) => {
 		}
 	}, [data])
 
-
 	const fields = [
 		{attr: 'name', label: 'Nome'},
 		{attr: 'email', label: 'E-mail'},
@@ -40,15 +38,20 @@ const CustomerTable = ({ data, page_size }) => {
 
 	if (!page) page = 1
 
-	let queryParams = ''
+	let query = ''
 	if (interests) {
-		queryParams += `&interests=${interests}`
+		query += `&interests=${interests}`
 	}
 	if (brands) {
-		queryParams += `&brands=${brands}`
+		query += `&brands=${brands}`
 	}
 	if (products) {
-		queryParams += `&products=${products}`
+		query += `&products=${products}`
+	}
+
+	function prevPage() {
+		setQueryParams({...queryParams, page: page-1})
+		filterCustomers()
 	}
 
 	return (
@@ -62,13 +65,13 @@ const CustomerTable = ({ data, page_size }) => {
 			/>
 			<Paginator>
 					<span className="step-links">
-						<button disabled={page <= 1} onClick={e => router.push(`/dashboard?page=${+page - 1}${queryParams}`)}>
+						<button disabled={page <= 1} onClick={e => filterCustomers({page: page-1})}>
 							<FontAwesomeIcon icon={faChevronLeft} />
 						</button>
 						<span className="current">{page ? page : 1}</span>
 						{/* <a href="#" onClick={e => router.push(`/dashboard?page=2`)}>2</a> */}
 
-						<button disabled={Math.floor(data.count / page_size) < page} onClick={e => router.push(`/dashboard?page=${+page + 1}${queryParams}`)}>
+						<button disabled={Math.floor(data.count / page_size) < page} onClick={e => filterCustomers({page: page+1})}>
 							<FontAwesomeIcon icon={faChevronRight} />
 						</button>
 					</span>

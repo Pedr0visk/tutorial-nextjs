@@ -25,6 +25,8 @@ import { Breadcrumb, Head } from '../../components/patterns'
 import { UIButton, SearchField, LoadingGif} from '../../components/ui'
 import SegmentFilter from '../../components/segments/SegmentFilter'
 
+const PAGE_SIZE = 2
+
 
 const content = ({ segmentsChoosen, chooseSegment, filterCustomers }) => (
   <div style={{width: 800, height: '75vh'}}>
@@ -51,53 +53,75 @@ const content = ({ segmentsChoosen, chooseSegment, filterCustomers }) => (
 );
 
 const Dashboard = ({ customers }) => {
+	const [queryParams, setQueryParams] = useState({})
 	const [dataset, setDataset] = useState([])
 	const [loading, setLoading] = useState(false)
+
 	const [segmentsChoosen, chooseSegment] = useState({
 		interests: [],
 		products: [],
 		brands: []
 	})
-	
+
+	const [segmentsRuler, setSegmentsRuler] = useState({
+		interests: 'in',
+		products: 'in',
+		brands: 'in'
+	})
+
 	useEffect(() => {
 		setDataset(customers)
+		// setup params
+		setQueryParams({page_size: PAGE_SIZE, page: 1})
 	}, [])
 
-	function _buildQueryParams(segments) {
-		let queryParams = ''
-
-		Object.keys(segments).map(key => {
-			console.log(segments[key])
-			if (segments[key].length > 0) {
-				let list = segments[key].map(item => item.id)
-				queryParams += `${key}=${list.join(',')},in&`
-			}
+	function _mountQuery(params) {
+		let query = ''
+		Object.keys(params).map(key => {
+			query += `${key}=${params[key]}&`
 		})
 
-		return queryParams
+		return query
 	}
 
 	async function exportCustomers() {
-		const queryParams = _buildQueryParams(segmentsChoosen)
+		const queryParams = _mountQuery(segmentsChoosen)
 		const uri = `${process.env.apiUrl}/api/customers/xlsx/export/?${queryParams}`
-		console.log(uri)
 		window.open(uri)
 	}
 
-	async function filterCustomers() {
-		const queryParams = _buildQueryParams(segmentsChoosen)
+	async function filterCustomers({page=null}) {
+		let segmentParams = {}
+
+		Object.keys(segmentsChoosen).map(key => {
+			if (segmentsChoosen[key].length > 0) {
+				let list = segmentsChoosen[key].map(item => item.id) // [123,321,421]
+				segmentParams = {...segmentParams, [key]: `${list.join(',')},in`}
+			}
+		})
+
+		let newQueryParams = {
+			...newQueryParams,
+			...segmentParams,
+			...queryParams,
+			page: page ? page : queryParams.page
+		}
+
+		const query = _mountQuery(newQueryParams)
 
 		try {
 			setLoading(true)
-			const uri = `${process.env.apiUrl}/api/customers/?${queryParams}`
+			const uri = `${process.env.apiUrl}/api/customers/?${query}`
 			const response = await fetch(uri)
 			const data = await response.json()
 			setDataset(data)
+			setQueryParams(newQueryParams)
 		} catch (error) {
 			console.log(error)
 		} finally {
 			setLoading(false)
 		}
+
 	}
 
   return (
@@ -108,7 +132,18 @@ const Dashboard = ({ customers }) => {
           <NavbarItem>
 						{/* Dropdown Btn */}
             {/* <Dropdown setDataset={setDataset} setLoading={setLoading} /> */}
-						<Popover placement="bottomRight" content={() => content({segmentsChoosen, chooseSegment, filterCustomers})} trigger="click">
+						<Popover 
+							placement="bottomRight" 
+							content={() => content({
+								segmentsChoosen, 
+								chooseSegment, 
+								filterCustomers,
+								setSegmentsRuler,
+								setQueryParams,
+								queryParams
+							})} 
+							trigger="click"
+						>
 							<DropdownBtn>
 								<Icon><FontAwesomeIcon icon={faFilter} /></Icon>
 								<Text>Segmentos</Text>
@@ -132,7 +167,15 @@ const Dashboard = ({ customers }) => {
 				<Head title="Dashboard" subtitle="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis aspernatur iste laboriosam obcaecati, distinctio sapiente consequuntur et ad consectetur vel!" />
 
 				<WidgetsCustomers />
-				{!loading && <CustomerTable data={dataset} page_size={30} />}
+				<div>{JSON.stringify(queryParams)}</div>
+				{!loading && 
+					<CustomerTable 
+						filterCustomers={filterCustomers} 
+						data={dataset} 
+						queryParams={queryParams} 
+						setQueryParams={setQueryParams}
+					/>
+				}
 				{loading && <LoadingGif />}
 			</div>
     </Layout>
@@ -142,7 +185,7 @@ const Dashboard = ({ customers }) => {
 export async function getStaticProps({ context }) {
 	const { HOST } = process.env
 	
-	const res = await fetch(`${HOST}/api/customers/`)
+	const res = await fetch(`${HOST}/api/customers/?page_size=${PAGE_SIZE}&page=1`)
   const data = await res.json()
 
 	if (!data) {
